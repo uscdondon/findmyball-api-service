@@ -1,0 +1,8 @@
+services:
+  api:
+    build: .
+    container_name: findmyball-api-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models:ro
