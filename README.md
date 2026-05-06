@@ -1,6 +1,6 @@
 # FindMyBall API Service
 
-AIM230 Case Study - API Deployment
+AIM230 Assignment - Building an ML API Service
 
 This project is a local FastAPI deployment prototype for FindMyBall, a golf ball computer vision MVP. It exposes a trained YOLOv8 detector through an image-upload REST API so a client can submit an image and receive detected golf-ball bounding boxes.
 
@@ -50,6 +50,12 @@ findmyball-api-service/
 
 The prediction endpoint accepts an optional `confidence` query parameter. The default is `0.25`, with a minimum of `0.01` and maximum of `1.0`.
 
+## API Design Notes
+
+The API uses FastAPI `UploadFile` because the model performs image object detection. Prediction responses use Pydantic schemas in `app/schemas/inference.py`.
+
+Input validation checks the image content type, confirms the file can be parsed by PIL, and keeps confidence values bounded from `0.01` to `1.0`. The response returns the detection count, labels, confidence scores, bounding boxes, and center points.
+
 ## Expected Model Path
 
 The trained YOLOv8 model must be available at:
@@ -59,6 +65,12 @@ models/findmyball_yolov8n.pt
 ```
 
 If the model file is missing, prediction requests return a clear HTTP 500 error.
+
+## Model Service
+
+`app/services/model.py` wraps the YOLOv8 model. The service checks model availability, loads the model, runs inference, and converts detections into structured API responses.
+
+This service layer keeps endpoint code separate from model-loading and inference logic.
 
 ## Local Setup
 
@@ -123,4 +135,5 @@ docker compose down
 ## Screenshot Checklist
 
 1. Swagger docs page at `http://localhost:8000/docs`
-2. Successful prediction response from `/api/v1/predict/image`
+2. Successful health check from `/api/v1/health`
+3. Successful prediction response from `/api/v1/predict/image`
