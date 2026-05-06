@@ -124,7 +124,3 @@ docker compose down
 
 1. Swagger docs page at `http://localhost:8000/docs`
 2. Successful prediction response from `/api/v1/predict/image`
-
-## Deployment Note
-
-Do not deploy this project to `findmyball.io` or `donminouye.com`. Do not create cloud resources for this assignment unless the assignment instructions are updated to require it.
